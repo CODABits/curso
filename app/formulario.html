@@ -4,82 +4,129 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Generar Diploma PDF</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js" crossorigin="anonymous"></script>
+  <!-- Asegúrate de cargar jsPDF antes de usarlo -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <link rel="icon" type="image/png" href="assets/img/lideres-conscientes-colombia-2024.webp">
   <style>
-    body { font-family: Arial, sans-serif; padding: 20px; text-align: center; }
-    input { padding: 10px; font-size: 16px; margin: 10px; }
+    body { 
+      font-family: Arial, sans-serif; 
+      padding: 10px; 
+      text-align: center; 
+      background-color: rgb(59, 175, 221); /* Azul claro */
+    
+      background-image: url('assets/img/hsm2025.jpg'); /* Ruta de la imagen */
+            background-size: cover; /* Ajusta la imagen para cubrir toda la pantalla */
+            background-position: center; /* Centra la imagen en la pantalla */
+            background-attachment: fixed; /* Hace que el fondo se quede fijo cuando haces scroll */
+            margin: 0;
+            height: 100vh; /* Asegura que el fondo cubra toda la altura de la pantalla */
+        }
+    
+    
+    
+    
+
+    h1 {
+      font-style: italic;
+      color: white;
+      text-shadow: 2px 2px 4px black;
+      font-size: 4vw; /* Responsivo */
+    }
+
+    input { 
+      padding: 10px; 
+      font-size: 4vw; /* Responsivo */
+      margin: 2vw; 
+      width: 80%; /* Se ajusta al tamaño de la pantalla */
+      max-width: 450px; /* Evita que sea demasiado grande */
+    }
+
     button {
       padding: 10px 20px;
-      font-size: 16px;
-      background-color: #4CAF50;
+      font-size: 4vw; /* Responsivo */
+      background-color: #1c39bb;
       color: white;
       border: none;
       cursor: pointer;
+       border-radius: 20px;
       transition: 0.3s;
+      width: 80%; /* Ajusta al tamaño de la pantalla */
+      max-width: 400px; /* Evita que sea demasiado grande */
     }
-    button:hover { background-color: #45A049; }
+
+    button:hover {
+      background-color: #42bea1;
+    }
+
+    .logo {
+      width: 40%; /* Ajusta el tamaño del logo */
+      max-width: 400px;
+      margin-top: 40px;
+    }
+
   </style>
 </head>
 <body>
-  <h1>Generar tu Diploma en PDF</h1>
+
+  <h1>📑Generar tu certificado</h1>
+
   <form id="diplomaForm">
-    <label for="name">Nombre completo:</label>
+    <label for="name" style="font-style: italic; color: white; text-shadow: 2px 2px 4px black; font-size: 4vw;">Nombre completo:</label>
     <input type="text" id="name" name="name" placeholder="Ingresa tu nombre" required>
-    <button type="submit">Descargar Diploma</button>
+    <button type="submit">Descargar Diploma👨🏼‍🎓</button>
   </form>
-      
 
   <script>
     document.getElementById('diplomaForm').addEventListener('submit', function(e) {
       e.preventDefault();
       const name = document.getElementById('name').value.trim();
       if (!name) return alert("Por favor, ingresa tu nombre.");
-  
+
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF();
-  
+
       // URL de la imagen (puedes reemplazarla por una URL válida o una ruta local)
-      const logo = "https://www.lideresconscientes.co/assets/img/lideres-conscientes-colombia-2024.webp"; 
-  
+      const logo = "https://cdn.glitch.global/512a1dc3-fac0-4253-aad0-247631f86f90/diploma%20rais%202025%20psicologia.png?v=1739744986013"; 
+
       // Definir tamaño de la imagen
-      const imgWidth = 60;  // Ancho de la imagen
-      const imgHeight = 60; // Alto de la imagen
-  
+      const imgWidth = 130;  // Ancho de la imagen
+      const imgHeight = 100; // Alto de la imagen
+
       // Definir tamaño de la página
       const pageWidth = 210; // Ancho del PDF (A4)
       const pageHeight = 297; // Alto del PDF (A4)
-  
+
       // Calcular posiciones para centrar la imagen
       const x = (pageWidth - imgWidth) / 2; // Centrar en X
       const y = pageHeight - imgHeight - 20; // Colocar abajo con margen de 20mm
-  
+
       // Poner fondo azul claro (RGB)
-      doc.setFillColor(135, 206, 235); // Azul claro
+      doc.setFillColor(59, 175, 221); // Azul claro
       doc.rect(0, 0, pageWidth, pageHeight, "F"); // Dibujar el fondo
-  
+
       // Agregar la imagen sobre el fondo azul
-      doc.addImage(logo, "WEBP", x, y, imgWidth, imgHeight);
-  
-      // Cargar la fuente personalizada (si la tienes)
-      // doc.addFont('assets/fonts/GreatVibes-Regular.ttf', 'GreatVibes', 'normal');
-      // doc.setFont('GreatVibes'); // Usar la fuente personalizada
-  
+      doc.addImage(logo, "PNG", x, y, imgWidth, imgHeight);
+
       // Texto con fondo y sombra
       doc.setFontSize(40);
       doc.setTextColor(0, 0, 0); // Negro para sombra
       doc.text("Certificado de Participación", 106, 51, { align: "center" });
-  
+
       doc.setTextColor(255, 255, 255); // Blanco para el texto principal
       doc.text("Certificado de Participación", 105, 50, { align: "center" });
-  
+
       // Añadir el resto del texto
       doc.setFontSize(20);
       doc.text(`Otorgado a: ${name}`, 105, 90, { align: "center" });
       doc.setFontSize(14);
-      doc.text("Por su destacada participación ", 105, 120, { align: "center" });
-      doc.text("en el curso de RIAS en salud mental", 105, 130, { align: "center" });
-      doc.text(`Fecha: ${new Date().toLocaleDateString()}`, 105, 150, { align: "center" });
-  
+      doc.text("Por su destacada participación en la capacitación", 105, 120, { align: "center" });
+doc.text("con el curso de RIAS en salud mental", 105, 125, { align: "center" }); // Ajuste aquí
+doc.text("10 Horas virtual", 105, 145, { align: "center" }); // Ajuste aquí
+doc.text(`Fecha: ${new Date().toLocaleDateString()}`, 105, 165, { align: "center" }); // Ajuste aquí
+
+
+
       try {
         doc.save(`Diploma_${name.replace(/\s+/g, '_')}.pdf`);
       } catch (error) {
@@ -87,19 +134,8 @@
       }
     });
   </script>
-  
 
+  <img class="logo" src="assets/img/logo-sanmarcos-2024.png" alt="Logo">
 
-
-
-
-
-  </body>
-  </html>
-  
-  
-  
-  
-  
-
-
+</body>
+</html>
