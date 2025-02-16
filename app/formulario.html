@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generar Diploma PDF</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; text-align: center; }
+    input { padding: 10px; font-size: 16px; margin: 10px; }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover { background-color: #45A049; }
+  </style>
+</head>
+<body>
+  <h1>Generar tu Diploma en PDF</h1>
+  <form id="diplomaForm">
+    <label for="name">Nombre completo:</label>
+    <input type="text" id="name" name="name" placeholder="Ingresa tu nombre" required>
+    <button type="submit">Descargar Diploma</button>
+  </form>
+      
+
+  <script>
+    document.getElementById('diplomaForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const name = document.getElementById('name').value.trim();
+      if (!name) return alert("Por favor, ingresa tu nombre.");
+  
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+  
+      // URL de la imagen (puedes reemplazarla por una URL válida o una ruta local)
+      const logo = "https://www.lideresconscientes.co/assets/img/lideres-conscientes-colombia-2024.webp"; 
+  
+      // Definir tamaño de la imagen
+      const imgWidth = 60;  // Ancho de la imagen
+      const imgHeight = 60; // Alto de la imagen
+  
+      // Definir tamaño de la página
+      const pageWidth = 210; // Ancho del PDF (A4)
+      const pageHeight = 297; // Alto del PDF (A4)
+  
+      // Calcular posiciones para centrar la imagen
+      const x = (pageWidth - imgWidth) / 2; // Centrar en X
+      const y = pageHeight - imgHeight - 20; // Colocar abajo con margen de 20mm
+  
+      // Poner fondo azul claro (RGB)
+      doc.setFillColor(135, 206, 235); // Azul claro
+      doc.rect(0, 0, pageWidth, pageHeight, "F"); // Dibujar el fondo
+  
+      // Agregar la imagen sobre el fondo azul
+      doc.addImage(logo, "WEBP", x, y, imgWidth, imgHeight);
+  
+      // Cargar la fuente personalizada (si la tienes)
+      // doc.addFont('assets/fonts/GreatVibes-Regular.ttf', 'GreatVibes', 'normal');
+      // doc.setFont('GreatVibes'); // Usar la fuente personalizada
+  
+      // Texto con fondo y sombra
+      doc.setFontSize(40);
+      doc.setTextColor(0, 0, 0); // Negro para sombra
+      doc.text("Certificado de Participación", 106, 51, { align: "center" });
+  
+      doc.setTextColor(255, 255, 255); // Blanco para el texto principal
+      doc.text("Certificado de Participación", 105, 50, { align: "center" });
+  
+      // Añadir el resto del texto
+      doc.setFontSize(20);
+      doc.text(`Otorgado a: ${name}`, 105, 90, { align: "center" });
+      doc.setFontSize(14);
+      doc.text("Por su destacada participación ", 105, 120, { align: "center" });
+      doc.text("en el curso de RIAS en salud mental", 105, 130, { align: "center" });
+      doc.text(`Fecha: ${new Date().toLocaleDateString()}`, 105, 150, { align: "center" });
+  
+      try {
+        doc.save(`Diploma_${name.replace(/\s+/g, '_')}.pdf`);
+      } catch (error) {
+        alert("Error al generar el PDF: " + error.message);
+      }
+    });
+  </script>
+  
+
+
+
+
+
+
+  </body>
+  </html>
+  
+  
+  
+  
+  
+
+
